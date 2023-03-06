@@ -2,5 +2,5 @@
 import Foundation
 
 protocol AttributedStringConvertible {
-    func attributedString(environment: Environment) -> NSAttributedString
+    func attributedString(environment: Environment) -> [NSAttributedString]
 }
