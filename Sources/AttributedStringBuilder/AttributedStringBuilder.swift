@@ -28,6 +28,8 @@ var example: some AttributedStringConvertible {
     "Another String"
 }
 
+let sampleAttributes = Attributes(family: "Times New Roman", size: 30)
+
 import SwiftUI
 
 struct DebugPreview: PreviewProvider {
@@ -35,7 +37,7 @@ struct DebugPreview: PreviewProvider {
 
         let string = example
             .joined()
-            .run(environment: .init())
+            .run(environment: Environment(attributes: sampleAttributes))
 
         Text(AttributedString(string))
     }
