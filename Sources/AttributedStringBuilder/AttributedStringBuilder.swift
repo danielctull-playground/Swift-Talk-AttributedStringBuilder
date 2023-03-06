@@ -27,6 +27,19 @@ var example: some AttributedStringConvertible {
     "Hello, World!"
         .bold()
         .foregroundColor(.red)
+
+    #"""
+    static var previews: some View {
+
+        let string = example
+            .joined()
+            .run(environment: Environment(attributes: sampleAttributes))
+
+        Text(AttributedString(string))
+    }
+    """#
+        .highlightSwift()
+
     "Another String"
 }
 

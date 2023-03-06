@@ -13,8 +13,17 @@ let package = Package(
     products: [
         .library(name: "AttributedStringBuilder", targets: ["AttributedStringBuilder"]),
     ],
+    dependencies: [
+        .package(url: "https://github.com/chriseidhof/SwiftHighlighting", branch: "main")
+    ],
     targets: [
-        .target(name: "AttributedStringBuilder"),
+
+        .target(
+            name: "AttributedStringBuilder",
+            dependencies: [
+                "SwiftHighlighting",
+            ]),
+
         .testTarget(name: "AttributedStringBuilderTests", dependencies: ["AttributedStringBuilder"]),
     ]
 )
