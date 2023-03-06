@@ -31,3 +31,23 @@ extension Attributes {
         ]
     }
 }
+
+// MARK: - Bold
+
+extension AttributedStringConvertible {
+
+    func bold() -> some AttributedStringConvertible {
+        Bold(content: self)
+    }
+}
+
+private struct Bold: AttributedStringConvertible {
+
+    let content: AttributedStringConvertible
+
+    func attributedString(environment: Environment) -> [NSAttributedString] {
+        var environment = environment
+        environment.attributes.bold = true
+        return content.attributedString(environment: environment)
+    }
+}

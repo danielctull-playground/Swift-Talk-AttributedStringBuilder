@@ -25,6 +25,7 @@ extension Array: AttributedStringConvertible where Element == AttributedStringCo
 @AttributedStringBuilder
 var example: some AttributedStringConvertible {
     "Hello, World!"
+        .bold()
     "Another String"
 }
 
