@@ -5,24 +5,18 @@ import Foundation
 struct AttributedStringBuilder {
 
     static func buildBlock(_ components: AttributedStringConvertible...) -> some AttributedStringConvertible {
-        Build { environment in
-            components.flatMap { $0.attributedString(environment: environment) }
-        }
+        components
     }
 
     static func buildOptional(_ component: AttributedStringConvertible?) -> some AttributedStringConvertible {
-        Build { environment in
-            component?.attributedString(environment: environment) ?? []
-        }
+        component.map { [$0] } ?? []
     }
 }
 
-struct Build: AttributedStringConvertible {
-
-    let content: (Environment) -> [NSAttributedString]
+extension Array: AttributedStringConvertible where Element == AttributedStringConvertible {
 
     func attributedString(environment: Environment) -> [NSAttributedString] {
-        content(environment)
+        flatMap { $0.attributedString(environment: environment) }
     }
 }
 
