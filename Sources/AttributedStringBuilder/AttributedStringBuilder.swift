@@ -26,6 +26,7 @@ extension Array: AttributedStringConvertible where Element == AttributedStringCo
 var example: some AttributedStringConvertible {
     "Hello, World!"
         .bold()
+        .foregroundColor(.red)
     "Another String"
 }
 

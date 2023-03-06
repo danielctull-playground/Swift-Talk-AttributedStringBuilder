@@ -6,6 +6,7 @@ struct Attributes {
     var size: CGFloat = 14
     var traits: NSFontTraitMask = []
     var weight: Int = 5
+    var foregroundColor: NSColor = .textColor
 
     var bold: Bool {
         get {
@@ -27,27 +28,33 @@ extension Attributes {
         let fm = NSFontManager.shared
         let font = fm.font(withFamily: family, traits: traits, weight: weight, size: size)
         return [
-            .font: font as Any
+            .font: font as Any,
+            .foregroundColor: foregroundColor as Any,
         ]
     }
 }
 
-// MARK: - Bold
+// MARK: - Modify
 
 extension AttributedStringConvertible {
 
     func bold() -> some AttributedStringConvertible {
-        Bold(content: self)
+        Modify(content: self) { $0.bold = true }
+    }
+
+    func foregroundColor(_ color: NSColor) -> some AttributedStringConvertible {
+        Modify(content: self) { $0.foregroundColor = color }
     }
 }
 
-private struct Bold: AttributedStringConvertible {
+private struct Modify: AttributedStringConvertible {
 
     let content: AttributedStringConvertible
+    let modify: (inout Attributes) -> ()
 
     func attributedString(environment: Environment) -> [NSAttributedString] {
         var environment = environment
-        environment.attributes.bold = true
+        modify(&environment.attributes)
         return content.attributedString(environment: environment)
     }
 }
