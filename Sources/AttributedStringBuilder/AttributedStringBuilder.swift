@@ -39,9 +39,9 @@ import SwiftUI
 struct DebugPreview: PreviewProvider {
     static var previews: some View {
 
-        let string = Lines {
-            example
-        }.single(environment: .init())
+        let string = example
+            .joined()
+            .run(environment: .init())
 
         Text(AttributedString(string))
     }

@@ -1,10 +1,17 @@
 
 import Foundation
 
-struct Lines<Content: AttributedStringConvertible>: AttributedStringConvertible {
+extension AttributedStringConvertible {
 
-    @AttributedStringBuilder
+    func joined(separator: AttributedStringConvertible = "\n") -> some AttributedStringConvertible {
+        Joined(content: self, separator: separator)
+    }
+}
+
+struct Joined<Content: AttributedStringConvertible>: AttributedStringConvertible {
+
     let content: Content
+    let separator: AttributedStringConvertible
 
     func attributedString(environment: Environment) -> [NSAttributedString] {
         [single(environment: environment)]
@@ -14,8 +21,11 @@ struct Lines<Content: AttributedStringConvertible>: AttributedStringConvertible 
         let pieces = content.attributedString(environment: environment)
         guard let first = pieces.first else { return .init() }
         let result = NSMutableAttributedString(attributedString: first)
+        let separators = separator.attributedString(environment: environment)
         for piece in pieces.dropFirst() {
-            result.append(.init(string: "\n", attributes: environment.attributes))
+            for separator in separators {
+                result.append(separator)
+            }
             result.append(piece)
         }
         return result
