@@ -28,6 +28,13 @@ var example: some AttributedStringConvertible {
         .bold()
         .foregroundColor(.red)
 
+    #"""
+    This is some markdown with **strong** text.
+
+    Another *paragraph*.
+    """#
+        .markdown()
+
     NSImage(systemSymbolName: "hand.wave", accessibilityDescription: nil)!
 
     Embed(proposedSize: ProposedViewSize(width: 200, height: nil)) {
@@ -66,6 +73,8 @@ struct TextView: NSViewRepresentable {
         view.isEditable = false
         view.textContainer!.lineFragmentPadding = 0
         view.textContainer!.widthTracksTextView = false
+        view.drawsBackground = true
+        view.backgroundColor = .white
         return view
     }
 
@@ -73,7 +82,7 @@ struct TextView: NSViewRepresentable {
         view.textStorage?.setAttributedString(attributedString)
     }
 
-    func sizeThatFits(_ proposal: ProposedViewSize, view: NSTextView, context: Context) -> CGSize? {
+    func sizeThatFits(_ proposal: ProposedViewSize, nsView view: NSTextView, context: Context) -> CGSize? {
         let container = view.textContainer!
         container.size = proposal.replacingUnspecifiedDimensions(by: .zero)
         view.layoutManager?.ensureLayout(for: container)
@@ -89,6 +98,7 @@ struct DebugPreview: PreviewProvider {
             .run(environment: Environment(attributes: sampleAttributes))
 
         TextView(attributedString: string)
+            .frame(width: 400)
             .previewLayout(.sizeThatFits)
     }
 }

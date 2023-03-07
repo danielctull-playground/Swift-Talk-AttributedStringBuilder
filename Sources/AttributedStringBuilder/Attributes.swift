@@ -7,6 +7,8 @@ struct Attributes {
     var traits: NSFontTraitMask = []
     var weight: Int = 5
     var foregroundColor: NSColor = .textColor
+    var lineHeightMultiple: CGFloat = 1.2
+    var paragraphSpacing: CGFloat = 10
 
     var bold: Bool {
         get {
@@ -20,16 +22,33 @@ struct Attributes {
             }
         }
     }
+
+    var italic: Bool {
+        get {
+            traits.contains(.italicFontMask)
+        }
+        set {
+            if newValue {
+                traits.insert(.italicFontMask)
+            } else {
+                traits.remove(.italicFontMask)
+            }
+        }
+    }
 }
 
 extension Attributes {
 
     var dictionary: [NSAttributedString.Key: Any] {
         let fm = NSFontManager.shared
-        let font = fm.font(withFamily: family, traits: traits, weight: weight, size: size)
+        let font = fm.font(withFamily: family, traits: traits, weight: weight, size: size)!
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = lineHeightMultiple
+        paragraphStyle.paragraphSpacing = paragraphSpacing
         return [
-            .font: font as Any,
-            .foregroundColor: foregroundColor as Any,
+            .font: font,
+            .foregroundColor: foregroundColor,
+            .paragraphStyle: paragraphStyle
         ]
     }
 }

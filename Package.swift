@@ -14,14 +14,16 @@ let package = Package(
         .library(name: "AttributedStringBuilder", targets: ["AttributedStringBuilder"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/chriseidhof/SwiftHighlighting", branch: "main")
+        .package(url: "https://github.com/chriseidhof/SwiftHighlighting", branch: "main"),
+        .package(url: "https://github.com/apple/swift-markdown", branch: "main"),
     ],
     targets: [
 
         .target(
             name: "AttributedStringBuilder",
             dependencies: [
-                "SwiftHighlighting",
+                .product(name: "SwiftHighlighting", package: "SwiftHighlighting"),
+                .product(name: "Markdown", package: "swift-markdown"),
             ]),
 
         .testTarget(name: "AttributedStringBuilderTests", dependencies: ["AttributedStringBuilder"]),
