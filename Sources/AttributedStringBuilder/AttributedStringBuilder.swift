@@ -30,7 +30,7 @@ var example: some AttributedStringConvertible {
 
     NSImage(systemSymbolName: "hand.wave", accessibilityDescription: nil)!
 
-    Embed {
+    Embed(proposedSize: ProposedViewSize(width: 200, height: nil)) {
         HStack {
             Image(systemName: "hand.wave")
             Text("Hello from SwiftUI")
