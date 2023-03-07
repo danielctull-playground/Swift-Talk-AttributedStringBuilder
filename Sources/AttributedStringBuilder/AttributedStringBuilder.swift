@@ -30,6 +30,14 @@ var example: some AttributedStringConvertible {
 
     NSImage(systemSymbolName: "hand.wave", accessibilityDescription: nil)!
 
+    Embed {
+        HStack {
+            Image(systemName: "hand.wave")
+            Text("Hello from SwiftUI")
+            Color.red.frame(width: 100, height: 50)
+        }
+    }
+
     #"""
     static var previews: some View {
 

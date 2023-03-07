@@ -17,6 +17,7 @@ struct Joined<Content: AttributedStringConvertible>: AttributedStringConvertible
         [single(environment: environment)]
     }
 
+    @MainActor
     func single(environment: Environment) -> NSAttributedString {
         let pieces = content.attributedString(environment: environment)
         guard let first = pieces.first else { return .init() }
