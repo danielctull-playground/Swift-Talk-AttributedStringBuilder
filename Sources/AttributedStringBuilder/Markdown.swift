@@ -2,10 +2,29 @@
 import Markdown
 import Foundation
 
+protocol Stylesheet {
+    func strong(attributes: inout Attributes)
+    func emphasis(attributes: inout Attributes)
+}
+
+extension Stylesheet {
+
+    func strong(attributes: inout Attributes) {
+        attributes.bold = true
+    }
+
+    func emphasis(attributes: inout Attributes) {
+        attributes.italic = true
+    }
+}
+
+struct DefaultStylesheet: Stylesheet {}
+
 private struct AttributedStringWalker: MarkupWalker {
 
     let result = NSMutableAttributedString()
     var attributes: Attributes
+    var stylesheet: any Stylesheet = DefaultStylesheet()
 
     func visitText(_ text: Text) -> () {
         result.append(NSAttributedString(string: text.string, attributes: attributes.dictionary))
@@ -14,14 +33,14 @@ private struct AttributedStringWalker: MarkupWalker {
     mutating func visitStrong(_ strong: Strong) -> () {
         let original = attributes
         defer { attributes = original }
-        attributes.bold = true
+        stylesheet.strong(attributes: &attributes)
         descendInto(strong)
     }
 
     mutating func visitEmphasis(_ emphasis: Emphasis) -> () {
         let original = attributes
         defer { attributes = original }
-        attributes.italic = true
+        stylesheet.emphasis(attributes: &attributes)
         descendInto(emphasis)
     }
 
