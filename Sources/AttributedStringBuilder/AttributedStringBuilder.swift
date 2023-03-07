@@ -28,6 +28,8 @@ var example: some AttributedStringConvertible {
         .bold()
         .foregroundColor(.red)
 
+    NSImage(systemSymbolName: "hand.wave", accessibilityDescription: nil)!
+
     #"""
     static var previews: some View {
 
@@ -47,6 +49,30 @@ let sampleAttributes = Attributes(family: "Times New Roman", size: 30)
 
 import SwiftUI
 
+struct TextView: NSViewRepresentable {
+
+    let attributedString: NSAttributedString
+
+    func makeNSView(context: Context) -> NSTextView {
+        let view = NSTextView()
+        view.isEditable = false
+        view.textContainer!.lineFragmentPadding = 0
+        view.textContainer!.widthTracksTextView = false
+        return view
+    }
+
+    func updateNSView(_ view: NSTextView, context: Context) {
+        view.textStorage?.setAttributedString(attributedString)
+    }
+
+    func sizeThatFits(_ proposal: ProposedViewSize, view: NSTextView, context: Context) -> CGSize? {
+        let container = view.textContainer!
+        container.size = proposal.replacingUnspecifiedDimensions(by: .zero)
+        view.layoutManager?.ensureLayout(for: container)
+        return view.layoutManager?.usedRect(for: container).size
+    }
+}
+
 struct DebugPreview: PreviewProvider {
     static var previews: some View {
 
@@ -54,7 +80,8 @@ struct DebugPreview: PreviewProvider {
             .joined()
             .run(environment: Environment(attributes: sampleAttributes))
 
-        Text(AttributedString(string))
+        TextView(attributedString: string)
+            .previewLayout(.sizeThatFits)
     }
 }
 #endif
